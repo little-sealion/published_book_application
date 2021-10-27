@@ -1,0 +1,51 @@
+<!-- this page is for admin to create accounts for publishers -->
+<!-- login page for admin & publishers to login -->
+
+<!-- Oct 22th *********************************************************************** -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/create_user.js" defer></script>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Create User</title>
+</head>
+
+<!-- firstName,lastName,email,username,password,accessRights -->
+<body>
+
+    <form id="create-user-form">
+        <h1>Register</h1>
+        <div>
+            <label for="firstName">First Name</label>
+            <input type="text" name="firstName" id="firstName">
+        </div>
+        <div>
+            <label for="lastName">Last Name</label>
+            <input type="text" name="lastName" id="lastName">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+        </div>
+        <div>
+
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username">
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+        </div>
+        <div>
+            <label for="accessRights">Access Rights</label>
+            <input type="text" name="accessRights" id="accessRights">
+        </div>
+        <input type="button" value="Create User" onclick="postCreateUser()">
+    </form>
+</body>
+</html>
+
+<!-- Oct 22th *********************************************************************** -->

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Application</title>
+    <!-- <script src="../controller/logout.js" defer></script> -->
+</head>
+<body>
+    <header>
+        <h1>Published Books in Austrlia</h1>
+        <!-- <button><a href="./register.html">Register</a></button> -->
+        <button><a href="./login.html">Log In</a></button>
+        <button hidden onclick="logOut()">Logout</button>
+    </header>
+    <main id = 'root'>
+
+    </main>
+    <script>
+        function logOut(){
+            fetch('/api/logout',{method:'post'}).catch(
+                err => console.log(err)
+            )
+        }
+        function getAllBooks(){
+            let innerHTML = ''
+            fetch('/api/books')
+            .then(res => res.json())
+            .then(
+                books => {
+                // console.log(innerHTML)
+                books.map(book => {
+                    // console.log(book)
+                    innerHTML += `<div><h3>${book.BookTitle}</h3></div>`
+                    // console.log(innerHTML)
+                })
+                let root = document.getElementById('root')
+                root.innerHTML = innerHTML
+            })
+            .catch(
+                err => console.log(err)
+            )
+        }
+        getAllBooks();
+    </script>
+
+    <!-- search block,can search book by publisher/author/category/book name/publish_date -->
+    <!-- book display section each book displayed as a card, with image/author/publisher/book name/published date/category/book description -->
+    <!-- protected access: log for each book can't be access by anonymous user -->
+    <!-- protected access: edit/delete book can't be access by anonymous user -->
+</body>
+</html>
