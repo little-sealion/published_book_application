@@ -1,4 +1,3 @@
-const { Module } = require('module');
 const db = require('../database');
 
 module.exports.getAllUsers = () => {
@@ -21,10 +20,12 @@ module.exports.createUser = (
   );
 };
 
-// OCT 22th *********************************************************************************************
-
 module.exports.getUserById = (userId) => {
   return db.query('select * from users where userId = ?', [userId]);
+};
+
+module.exports.getUserByUsername = (username) => {
+  return db.query('select * from users where username = ?', [username]);
 };
 
 module.exports.updateUser = (
@@ -45,4 +46,3 @@ module.exports.updateUser = (
 module.exports.deleteUser = (userId) => {
   return db.query('delete from users where userId = ? ', [userId]);
 };
-// OCT 22th *********************************************************************************************

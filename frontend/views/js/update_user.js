@@ -9,7 +9,6 @@ if (userId) {
     .then((user) => {
       console.log(user);
       //   push exisiting user information into the
-      document.getElementById('userId').value = user.userID;
       document.getElementById('firstName').value = user.firstName;
       document.getElementById('lastName').value = user.lastName;
       document.getElementById('email').value = user.email;
@@ -20,26 +19,41 @@ if (userId) {
 }
 
 // <!-- post back updated data -->
-function postUpdateUser() {
+function postUpdateUser(event) {
+  event.preventDefault();
   // <!-- Get access to the updated user form -->
   let updateUserForm = document.getElementById('update-user-form');
-
-  let formDataJSON = JSON.stringify(
-    Object.fromEntries(new FormData(updateUserForm))
-  );
+  let formData = new FormData(updateUserForm);
+  formData.append('userId', userId);
+  let formDataJSON = JSON.stringify(Object.fromEntries(formData));
   console.log(formDataJSON);
-
-  //   Post the JSON data tothe API
-  fetch('api/users/update', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: formDataJSON,
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      alert(res);
-      // redirect back to user list
-
-      //   window.location.href = 'list_users.html';
-    });
+  if (event.target.reportValidity()) {
+    //   Post the JSON data tothe API
+    fetch('api/users/update', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: formDataJSON,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        alert(res);
+        // redirect back to user list
+        window.location.href = 'list_users.html';
+      });
+  }
+}
+// validate each input and display corresponding error message(if there is)
+function validate(elem) {
+  let errorMessage = '';
+  const errorDiv = elem.nextElementSibling;
+  if (!elem.checkValidity()) {
+    for (key in elem.validity) {
+      if (elem.validity[key]) {
+        errorMessage = key;
+      }
+    }
+  } else {
+    errorMessage = '';
+  }
+  errorDiv.innerText = errorMessage;
 }
