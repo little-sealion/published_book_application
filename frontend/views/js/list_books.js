@@ -1,3 +1,4 @@
+// fetch the books list, and populate them to the book_list page
 fetch('/api/books')
   .then((res) => res.json())
   .then((books) => {
@@ -10,12 +11,24 @@ fetch('/api/books')
         </div>
       </div>
 `;
+    // for each book, fetch the createdDate of that book, and convert it to local time
     for (let book of books) {
-      // console.log(book);
       let dateCreated =
-        book.dateCreated != null ? book.dateCreated.slice(0, -5) : '2021-11-15';
+        book.dateCreated != null
+          ? new Date(book.dateCreated)
+              .toString()
+              .replace('GMT+1000 (Australian Eastern Standard Time)', '')
+          : 'Mon Nov 15 2021';
+      // for each book, fetch the lastUpdatedDate of that book, and convert it to local time
       let lastUpdated =
-        book.lastUpdated != null ? book.lastUpdated.slice(0, -5) : '2021-11-15';
+        book.lastUpdated != null
+          ? new Date(book.lastUpdated)
+              .toString()
+              .replace('GMT+1000 (Australian Eastern Standard Time)', '')
+          : 'Mon Nov 15 2021';
+
+      // if the book does not have an bookcover image, give it a default image
+      // then render the book element
       let coverImage =
         book.coverImagePath == ''
           ? 'https://dl.acm.org/specs/products/acm/releasedAssets/images/cover-default--book.svg'
@@ -39,3 +52,14 @@ fetch('/api/books')
 `;
     }
   });
+
+function convertUTCDateToLocalDate(date) {
+  var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+
+  var offset = date.getTimezoneOffset() / 60;
+  var hours = date.getHours();
+
+  newDate.setHours(hours - offset);
+
+  return newDate;
+}

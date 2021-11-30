@@ -18,9 +18,11 @@ function postLoginUser() {
     .then((res) => res.json())
     .then((res) => {
       alert(res);
+      // if login success, redirect to the index page
       window.location.href = 'index.html';
     })
     .catch((err) => {
+      // if login fails, consolog the error message
       console.log('user login failed - ' + err);
     });
 }

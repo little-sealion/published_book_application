@@ -8,7 +8,7 @@ if (userId) {
     .then((res) => res.json())
     .then((user) => {
       console.log(user);
-      //   push exisiting user information into the
+      //   push exisiting user information into the 
       document.getElementById('firstName').value = user.firstName;
       document.getElementById('lastName').value = user.lastName;
       document.getElementById('email').value = user.email;

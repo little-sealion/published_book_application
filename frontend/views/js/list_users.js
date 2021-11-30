@@ -1,7 +1,10 @@
+// fetch the whole user list, and populate them in the userlist page
 fetch('/api/users')
   .then((res) => res.json())
   .then((users) => {
+    // get the userList element
     let userListSection = document.getElementById('user-list');
+    // render the addUser elements, when click on the image, you will be direct to the create_user page
     userListSection.innerHTML += `
     <div class="card col-6 col-sm-4" style="width: 18rem;">
         <a href="create_user.html"><img src="https://cdn-icons-png.flaticon.com/512/166/166260.png" class="card-img-top" alt="add user icon"></a>

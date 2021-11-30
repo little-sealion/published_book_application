@@ -1,3 +1,6 @@
+// fetch all the existing books from the database, and then populate the index page
+// if user not logged in, the book element should not contan edit button nor delete buttton
+// also, book update log should not be shown
 fetch('/api/books')
   .then((res) => res.json())
   .then((books) => {

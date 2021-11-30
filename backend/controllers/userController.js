@@ -27,6 +27,7 @@ router.post('/users/create', async (req, res) => {
     // Hash password before inserting into the DB
     let hashedPassword = bcrypt.hashSync(user.password, 6);
 
+    // sanitise data before insert into database
     userModel
       .createUser(
         validator.escape(user.firstName),
@@ -52,6 +53,7 @@ router.get('/users/:id', (req, res) => {
   userModel
     .getUserById(id)
     .then((results) => {
+      // if databse returns result, return success code to the frontend
       if (results.length > 0) {
         res.status(200).json(results[0]);
       } else {
@@ -75,7 +77,7 @@ router.post('/users/update', (req, res) => {
   if (!user.password.startsWith('$')) {
     hashedPassword = bcrypt.hashSync(user.password, 6);
   }
-
+  // sanitise input data before insert into database
   userModel
     .updateUser(
       validator.escape(user.userId),

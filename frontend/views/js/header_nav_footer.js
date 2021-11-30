@@ -1,6 +1,8 @@
+// consolog for debugging use
 console.log(getCookie('username'));
 console.log(getCookie('accessRights'));
 
+// if the user logout, delete the "username" cookie and the "accessRights" cookie
 function postLogoutUser() {
   delete_cookie('username');
   delete_cookie('accessRights');
@@ -8,13 +10,19 @@ function postLogoutUser() {
     .then((res) => res.json())
     .then((res) => {
       alert(res);
+      // if user logout, redirect it to index page
       window.location.href = 'index.html';
     })
     .catch((err) => {
+      // if user fail to logout, log the error message
       console.log('logout failed -' + err);
     });
 }
 
+// set a dynamic header
+// if "username" cookie is not null, render the "manage Books" nav menu
+//if "accessRights" cookie is admin, render the "manage Users" nav menu
+// if an user is logged in, display the username and its accessRights, and hide the login button, meanwhile show the logout button
 document.getElementById('myHeader').innerHTML = `
 <header class="p-3 bg-dark text-white sticky-top">
 <div class="container">
@@ -25,6 +33,7 @@ document.getElementById('myHeader').innerHTML = `
 
     <ul id="nav_panel" class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
       <li><a href="/index.html" class="nav-link px-2 ">Digital Library</a></li>
+      
        ${
          getCookie('username') != null
            ? `<li><a href="list_books.html" class="nav-link px-2 text-white">Manage Books</a></li>`
@@ -53,6 +62,7 @@ document.getElementById('myHeader').innerHTML = `
 </header>
 `;
 
+// dynamically render the footer part
 document.getElementById('myFooter').innerHTML = `
 <footer class="footer mt-auto py-3 bg-dark">
   <div class="container">
@@ -61,6 +71,7 @@ document.getElementById('myFooter').innerHTML = `
 </footer>
 `;
 
+// define the getCookie method
 function getCookie(name) {
   // Split cookie string and get all individual name=value pairs in an array
   var cookieArr = document.cookie.split(';');
@@ -80,6 +91,7 @@ function getCookie(name) {
   // Return null if not found
   return null;
 }
+// define the delete Cookie method, the arg is the cookie name
 function delete_cookie(name) {
   document.cookie =
     name +

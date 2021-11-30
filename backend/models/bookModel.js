@@ -3,6 +3,7 @@ const db = require('../database.js');
 
 module.exports.getAllBooks = async () => {
   // get all the books info from book table , left join changelog table to get the latest changedate and the createdATE
+  // so the latestUpdated date and create date can be displayed on each book
   return db.query(
     `select book.bookID,bookTitle,originalTitle,yearofPublication,genre,millionsSold,
     languageWritten,coverImagePath,book.authorID, createLog.dateCreated,changeLog.lastUpdated from book 
@@ -19,7 +20,7 @@ module.exports.getBookById = (id) => {
   return db.query('select * from book where bookID = ?', [id]);
 };
 
-// bind parameters, to avoid malicious sql injection
+// Define and export the method to create book
 module.exports.createBook = (
   bookTitle,
   originalTitle,
@@ -30,6 +31,7 @@ module.exports.createBook = (
   coverImagePath,
   authorID
 ) => {
+  // bind parameters, to avoid malicious sql injection
   return db.query(
     'insert into book (  bookTitle,originalTitle,yearofPublication,genre,millionsSold,languageWritten,coverImagePath,authorID) values (?,?,?,?,?,?,?,?)',
     [
@@ -45,6 +47,7 @@ module.exports.createBook = (
   );
 };
 
+// Define and export the method to update book
 module.exports.updateBook = (
   bookId,
   bookTitle,
@@ -56,6 +59,7 @@ module.exports.updateBook = (
   coverImagePath,
   authorID
 ) => {
+  // bind parameters, to avoid malicious sql injection
   return db.query(
     'update book set bookTitle = ?, originalTitle = ?, yearofPublication = ?, genre = ?, millionsSold = ?, languageWritten = ? ,coverImagePath = ?, authorID = ? where bookID = ?',
     [
@@ -72,6 +76,7 @@ module.exports.updateBook = (
   );
 };
 
+// Define and export the method to delete book
 module.exports.deleteBook = (bookId) => {
   return db.query('delete from book where bookID = ?', [bookId]);
 };

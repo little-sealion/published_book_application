@@ -47,6 +47,8 @@ router.post('/books/create', upload.single('coverImagePath'), (req, res) => {
   const book = req.body;
   const now = new Date();
   let coverImagePath = 'uploads/' + req.file.originalname;
+
+  // sanitise the input fields
   bookModel
     .createBook(
       validator.escape(book.bookTitle),
@@ -61,16 +63,20 @@ router.post('/books/create', upload.single('coverImagePath'), (req, res) => {
     .then((result) => {
       res.status(200).json('book created with id' + result.insertId);
       console.log('req.session', req.session);
+      // when book update is successful, insert a record into the changelog table in database
       logModel
         .createLog(
+          // formate date before insert into database
           date.format(now, 'YYYY/MM/DD HH:mm:ss'),
           null,
           result.insertId,
+          // track the userId who is doing the update
           req.session.user.userID
         )
         .then((result) => console.log(result.insertId))
         .catch((err) => console.log(err.message));
     })
+    // if there's an error, error code 500 and message will be returned
     .catch((error) => {
       console.log(error);
       res.status(500).json('query error - failed to create book');
@@ -86,6 +92,7 @@ router.post(
 
     const book = req.body;
     const now = new Date();
+    // get the imageURL of that book being updated
     let result = await bookModel.getBookById(book.bookId);
     let coverImagePath = result[0].coverImagePath;
     if (req.file) {
@@ -94,6 +101,7 @@ router.post(
     console.log('coverImagePath', coverImagePath);
     //   Each of the names below reference the "name" attribute in the form
 
+    // sanitise inputs before insert into database
     bookModel
       .updateBook(
         book.bookId,
@@ -109,9 +117,12 @@ router.post(
       .then((result) => {
         if (result.affectedRows > 0) {
           res.status(200).json('book updated');
+
+          // if book creation is sucessful,insert a record into the changelog table in database
           logModel
             .createLog(
               null,
+              // format the date before insertion
               date.format(now, 'YYYY/MM/DD HH:mm:ss'),
               book.bookId,
               req.session.user.userID
@@ -131,7 +142,7 @@ router.post(
 
 router.post('/books/delete', (req, res) => {
   const { bookId } = req.body;
-  //   ask the model to delete user by userId
+  //   ask the model to delete book by userId
   bookModel
     .deleteBook(bookId)
     .then((result) => {

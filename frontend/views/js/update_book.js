@@ -3,6 +3,7 @@ let today = new Date();
 let yyyy = today.getFullYear();
 document.getElementById('yearofPublication').setAttribute('max', yyyy);
 
+// fetch the author list from the databse, so we can populate them into the author select options
 fetch('/api/authors')
   .then((res) => res.json())
   .then((authors) => {
@@ -63,6 +64,8 @@ function postUpdateBook(event) {
 
   const imageElem = document.getElementById('avatar-image');
   event.target.reportValidity();
+
+  // to avoid refreshing page after form submission
   event.preventDefault();
   if (event.target.reportValidity()) {
     event.target.reset();

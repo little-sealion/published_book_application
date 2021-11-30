@@ -25,9 +25,6 @@ server.use(
   })
 );
 
-server.use(express.static('frontend/views'));
-// access control middleware
-
 server.use((req, res, next) => {
   console.log('req.session.user', req.session.user);
   // The user is logged in if they have session data
@@ -37,12 +34,15 @@ server.use((req, res, next) => {
   let allowedURLs = [
     '/index.html',
     '/js/index.js',
+    '/js/header_nav_footer.js',
     '/login.html',
     '/js/login.js',
     '/css/style.css',
+    '/css/book.css',
     '/api/users/login',
     '/api/books',
   ];
+  // define urls that only admin can access
   let adminOnlyURLs = [
     '/list_users.html',
     '/create_user.html',
@@ -62,6 +62,8 @@ server.use((req, res, next) => {
       // if user accessRights is admin
       if (req.session.user.accessRights == 'admin') {
         next();
+      } else {
+        res.redirect('/index.html');
       }
     } else {
       next();
@@ -70,15 +72,21 @@ server.use((req, res, next) => {
   // Else(they are not logged in)
   else {
     console.log('req.originalUrl', req.originalUrl);
-    if (allowedURLs.includes(req.originalUrl)) {
+    if (
+      allowedURLs.includes(req.originalUrl) ||
+      req.originalUrl.match(/\/uploads\/.*/)
+    ) {
       // Allow the guest user through
       next();
     } else {
       // If not allowed, redirect them to the login page
-      res.redirect('/login.html');
+      res.redirect('/index.html');
     }
   }
 });
+
+server.use(express.static('frontend/views'));
+// access control middleware
 
 // Link up book controller
 const bookController = require('./backend/controllers/bookController');
